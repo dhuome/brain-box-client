@@ -1,0 +1,147 @@
+@if (articleQuery.isLoading()) {
+<section class="flex items-center justify-center flex-1">
+  <span class="loading loading-spinner loading-lg"></span>
+</section>
+}@else if(articleQuery.isSuccess()) {
+
+<section class="flex flex-col flex-1 items-center py-12">
+  <header class="p-4 w-full max-w-2xl space-y-4 text-gray-shade-1">
+    <p class="text-center text-2xl font-TheSans-Bold">{{ articleQuery.data().title }}</p>
+    <aside class="flex justify-between font-TheSans-Plain">
+      <p>{{ "@" + articleQuery.data().author }}</p>
+      <p>{{ articleQuery.data().createdAt | timeAgo }}</p>
+    </aside>
+    <article class="flex flex-col w-full">
+      <aside class="divider"></aside>
+      @if (authService.getAuthInfo()) {
+
+      <aside class="flex justify-between gap-x-4">
+        <section class="flex gap-x-4">
+          @if (authService.hasAuthority(authorities.USER) && authService.getAuthInfo() &&
+          (authService.getAuthInfo()?.sub !== articleQuery.data().authorId.toString())) {
+          <button [disabled]="articleQuery.data().interaction === interaction.LIKE" type="button"
+            (click)="likeArticle()"
+            class="btn bg-white shadow-1 flex gap-x-2 disabled:bg-white disabled:text-gray-shade-1">{{
+            articleQuery.data().numberOfLikes }}
+            <svg [ngClass]="{'fill-error': articleQuery.data().interaction === interaction.LIKE}"
+              class="relative top-0 left-0 size-8 transition-all fill-current text-gray-shade-1 hover:scale-110 hover:rotate-[-10deg]"
+              viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+              <path
+                d="M29.845,17.099l-2.489,8.725C26.989,27.105,25.804,28,24.473,28H11c-0.553,0-1-0.448-1-1V13 c0-0.215,0.069-0.425,0.198-0.597l5.392-7.24C16.188,4.414,17.05,4,17.974,4C19.643,4,21,5.357,21,7.026V12h5.002 c1.265,0,2.427,0.579,3.188,1.589C29.954,14.601,30.192,15.88,29.845,17.099z"
+                id="XMLID_254_"></path>
+              <path
+                d="M7,12H3c-0.553,0-1,0.448-1,1v14c0,0.552,0.447,1,1,1h4c0.553,0,1-0.448,1-1V13C8,12.448,7.553,12,7,12z M5,25.5c-0.828,0-1.5-0.672-1.5-1.5c0-0.828,0.672-1.5,1.5-1.5c0.828,0,1.5,0.672,1.5,1.5C6.5,24.828,5.828,25.5,5,25.5z"
+                id="XMLID_256_"></path>
+            </svg>
+          </button>
+          <button [disabled]="articleQuery.data().interaction === interaction.DISLIKE" type="button"
+            (click)="dislikeArticle()"
+            class="btn bg-white shadow-1 flex gap-x-2 disabled:bg-white disabled:text-gray-shade-1">{{
+            articleQuery.data().numberOfDislikes }}
+            <svg [ngClass]="{'fill-error': articleQuery.data().interaction === interaction.DISLIKE}"
+              class="relative top-0 left-0 size-8 transition-all fill-gray-shade-1 hover:scale-110 hover:rotate-[-10deg] peer-checked:fill-error"
+              version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink">
+              <path
+                d="M2.156,14.901l2.489-8.725C5.012,4.895,6.197,4,7.528,4h13.473C21.554,4,22,4.448,22,5v14 c0,0.215-0.068,0.425-0.197,0.597l-5.392,7.24C15.813,27.586,14.951,28,14.027,28c-1.669,0-3.026-1.357-3.026-3.026V20H5.999 c-1.265,0-2.427-0.579-3.188-1.589C2.047,17.399,1.809,16.12,2.156,14.901z">
+              </path>
+              <path
+                d="M25.001,20h4C29.554,20,30,19.552,30,19V5c0-0.552-0.446-1-0.999-1h-4c-0.553,0-1,0.448-1,1v14 C24.001,19.552,24.448,20,25.001,20z M27.001,6.5c0.828,0,1.5,0.672,1.5,1.5c0,0.828-0.672,1.5-1.5,1.5c-0.828,0-1.5-0.672-1.5-1.5 C25.501,7.172,26.173,6.5,27.001,6.5z">
+              </path>
+            </svg>
+          </button>
+          }
+        </section>
+        @if (authService.hasAuthority(authorities.USER) && authService.getAuthInfo() && (authService.getAuthInfo()?.sub
+        === articleQuery.data().authorId.toString())) {
+        <button type="button" (click)="isDeleteArticlePopupActive.set(true)"
+          class="group size-12 rounded-full bg-gray-shade-1 border-none font-bold text-center flex items-center justify-center shadow-lg shadow-black/10 transition-all overflow-hidden relative hover:w-36 hover:duration-[.3s] hover:bg-error before:absolute before:-top-5 before:content-['Delete'] before:text-white before:duration-[.3s] hover:before:font-TheSans-Plain hover:before:opacity-100 hover:before:translate-y-7 hover:before:duration-[.3s] active:scale-95">
+          <svg viewBox="0 0 448 512"
+            class="w-3 duration-[.3s] group-hover:w-12 group-hover:translate-y-[60%] group-hover:duration-[.3s]">
+            <path class="fill-white"
+              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+            </path>
+          </svg>
+        </button>
+        }
+        @if (authService.hasAuthority(authorities.ADMIN)) {
+        <aside class="flex items-center gap-x-2 font-TheSans-Plain">
+          <button class="btn btn-ghost" (click)="isToggleArticleStatusPopupActive.set(true)">
+            <span
+              [ngClass]="{'bg-success animate-pulse': !articleQuery.data().isDisabled, 'bg-gray-shade-2': articleQuery.data().isDisabled}"
+              class="size-3 btn-circle shadow-1"></span>{{ !articleQuery.data().isDisabled ? "Disable Article" : "Enable
+            Article"
+            }}</button>
+        </aside>
+        }
+      </aside>
+      }
+      <aside class="divider"></aside>
+    </article>
+
+  </header>
+  <article class="md:size-2/4 px-4">
+    <img [src]="articleQuery.data().image.base64" class="rounded md:rounded-r-none size-full object-cover"
+      alt="image" />
+  </article>
+
+  <aside class="divider text-gray-shade-2 md:px-12">-=-=-=-=-</aside>
+  <p class="px-12 text-justify font-TheSans-Plain text-gray-shade-1">{{ articleQuery.data().body }}</p>
+  <aside class="divider text-gray-shade-2 md:px-12">-=-=-=-=-</aside>
+
+  @if (authService.getAuthInfo() && (authService.getAuthInfo()?.sub !== articleQuery.data().authorId.toString())) {
+  <app-comment-form class="w-full" [articleId]="articleQuery.data().id" />
+  }
+
+  <section class="w-full px-4 sm:px-12" [scrollWindow]="true" infiniteScroll [infiniteScrollDistance]="1"
+    [infiniteScrollThrottle]="150" (scrolled)="commentsQuery.fetchNextPage()">
+    <h1 class="text-3xl font-bold mb-4">Comments</h1>
+    <article class="flex flex-col gap-y-4">
+      @for (comment of commentsQuery.data(); track comment) {
+      <aside class="bg-white rounded-lg p-4 shadow border border-gray-200 animate-fadeIn">
+        <section class="flex flex-col sm:flex-row sm:items-center mb-2">
+          <aside class="flex items-center">
+            <img src="assets/images/profile-placeholder.png" alt="Avatar"
+              class="size-8 object-cover rounded-full mr-2" />
+            <p class="text-lg font-bold">{{ "@" + comment.author }}</p>
+          </aside>
+          <p class="text-gray-600 ml-auto">{{ comment.createdAt | timeAgo }}</p>
+        </section>
+        <p class="text-gray-800 line-clamp-1">{{ comment.comment }}</p>
+      </aside>
+      }@empty {
+      <div class="flex flex-col items-center justify-center flex-1 animate-fadeIn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          class="no-articles-icon h-12 w-12 text-gray-500 mb-4">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        <p class="no-articles-text text-gray-500">Oops! Looks like there are no comments yet, be the first comments.</p>
+      </div>
+      }
+      @if (commentsQuery.isPending() || commentsQuery.isFetchingNextPage()) {
+      <span class="loading loading-spinner loading-lg place-self-center"></span>
+      }
+    </article>
+  </section>
+</section>
+
+@if (isDeleteArticlePopupActive()) {
+<app-confirmation-popup [@fadeInOut] headerTitle="Delete Article"
+  message="Are you sure you want to delete this article?" actionTitle="Delete" cancelTitle="Cancel"
+  (triggerCancel)="isDeleteArticlePopupActive.set(false)" (triggerFunc)="onDeleteArticle()" />
+}
+
+@if (isToggleArticleStatusPopupActive()) {
+<app-confirmation-popup [@fadeInOut]
+  [headerTitle]="!articleQuery.data().isDisabled ? 'Disable Article' : 'Enable Article'"
+  [message]="!articleQuery.data().isDisabled ? 'Are you sure you want to disable this article?' : 'Are you sure you want to enable this article?'"
+  [actionTitle]="!articleQuery.data().isDisabled ? 'Disable' : 'Enable'" cancelTitle="Cancel"
+  (triggerCancel)="isToggleArticleStatusPopupActive.set(false)"
+  (triggerFunc)="!articleQuery.data().isDisabled ? onDisableArticle() : onEnableArticle()" />
+}
+
+<button (click)="navigationService.back()"
+  class="flex items-center justify-center gap-x-1 active:scale-95 transition-all fixed bottom-5 left-5 bg-white btn-circle shadow-1">
+  <img src="assets/icons/arrow.svg" class="w-4" alt="arrow" />
+</button>
+}

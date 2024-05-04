@@ -1,0 +1,47 @@
+<section class="fixed inset-0 bg-gray-800 opacity-30"></section>
+
+<main class="fixed flex justify-center items-center top-0 bottom-0 left-0 right-0 m-auto z-40">
+  <section class="flex flex-col items-center bg-white border-stone-50 border rounded-btn shadow text-gray-shade-1">
+    <button (click)="closeModal.emit()" class="self-end p-4 active:scale-95 transition-all">
+      <img src="assets/icons/close.svg" alt="close" class="size-5" />
+    </button>
+    <header class="text-center py-3">
+      <p class="font-TheSans-Bold text-lg">Post An Article</p>
+      <p class="font-TheSans-Plain text-xs">Please enter your article details to post it</p>
+    </header>
+    <article class="w-64 md:w-96"
+      [ngClass]="{'animate-fadeIn': formMessage.message || formMessage.apiMessage?.errorMessages}">
+      <app-form-message [formMessage]="formMessage" />
+    </article>
+    <form class="flex flex-col items-center space-y-4 p-4 md:px-12 md:py-6" #form="ngForm" [formGroup]="articleForm"
+      (ngSubmit)="onPostArticle()">
+      <article class="w-64 md:w-96">
+        <app-file-input controlName="image" [formGroupDirective]="form" [file]="articleForm.controls.image.value"
+          (triggerDelete)="articleForm.controls.image.setValue(null)"
+          (triggerSave)="articleForm.controls.image.setValue($event)" />
+      </article>
+
+      <article class="w-64 md:w-96">
+        <app-input controlName="title" [formGroupDirective]="form" label="Article title" [errors]="titleErrors"
+          [maxLength]="256" [isMandatory]="true" placeholder="Title . . ." />
+      </article>
+
+      <article class="w-64 md:w-96">
+        <label class="block mb-2 text-gray-shade-1 font-TheSans-Bold">Article content <span
+            class="text-error rtl:pr-0.5 ltr:pl-0.5">*</span>
+        </label>
+        <textarea
+          [ngClass]="{'animate-shake border-error' : (articleForm.controls.body.errors && articleForm.controls.body.touched) || (articleForm.controls.body.errors && form.submitted)}"
+          rows="4" formControlName="body"
+          class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 outline-none resize-none"
+          placeholder="Write your thoughts here..." maxlength="500"></textarea>
+      </article>
+
+      <button [disabled]="isLoading" class="btn btn-primary bg-primary border-none w-full disabled:text-white">Post it
+        @if (isLoading) {
+        <span class="loading loading-spinner"></span>
+        }
+      </button>
+    </form>
+  </section>
+</main>

@@ -1,0 +1,45 @@
+<section dir="ltr" class="w-full flex flex-col gap-y-2" [formGroup]="formGroupDirective.form">
+  <p class="font-TheSans-Bold text-xs md:text-base">Article picture<span
+      class="text-error rtl:pr-0.5 ltr:pl-0.5">*</span></p>
+  <input class="hidden" type="file" accept=".svg, .png, .jpg, .jpeg" (click)="fileInput.value = ''"
+    (change)="onSelectFile($event)" #fileInput />
+  <article
+    [ngClass]="{'animate-shake !border-error' : (formGroupDirective.form.get(controlName)?.errors && formGroupDirective.form.get(controlName)?.touched) || (formGroupDirective.form.get(controlName)?.errors && formGroupDirective.submitted)}"
+    class="flex items-center justify-between border border-gray-200 relative">
+    <aside class="flex items-center py-1 px-2 rtl:border-l ltr:border-r border-gray-200">
+      <button type="button" [disabled]="!!file" (click)="fileInput.click()"
+        class="active:scale-95 transition-all disabled:cursor-not-allowed disabled:opacity-20">
+        <img src="assets/icons/upload.svg" alt="upload" class="size-4 md:size-6" />
+      </button>
+    </aside>
+    @if (file) {
+    <aside class="flex flex-1 items-center gap-x-4 px-2 py-1">
+      <svg class="w-5 h-5 rounded-full stroke-4 stroke-current text-green-500 animate-fill"
+        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="animate-stroke-circle" cx="26" cy="26" r="25" fill="none" />
+        <path class="animate-stroke-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+      </svg>
+      <p class="font-TheSans-Bold text-[10px] md:text-xs lowercase truncate max-w-[9rem] md:max-w-[30rem]">{{ file ?
+        file.name : '' }}</p>
+    </aside>
+    }
+
+    <aside class="flex items-center py-1 px-2 rtl:border-r ltr:border-l border-gray-200">
+      <button type="button" [disabled]="!!!file" (click)="triggerDelete.emit()"
+        class="active:scale-95 transition-all disabled:cursor-not-allowed disabled:opacity-20">
+        <img src="assets/icons/trash.svg" alt="trash" class="size-4 md:size-6" />
+      </button>
+
+    </aside>
+  </article>
+  @if (!!fileError) {
+  <section class="flex items-center text-error peer:absolute bottom-0 rtl:right-0 ltr:left-0 py-px animate-fadeIn">
+    <img src="assets/icons/error.svg" alt="error" class="px-2 w-8" />
+    <p class="rtl:text-right ltr:text-left font-TheSans-Bold text-xs">{{ fileError }}</p>
+  </section>
+  }@else {
+  <section class="flex items-center peer:absolute bottom-0 rtl:right-0 ltr:left-0 py-px animate-fadeIn">
+    <p></p>
+  </section>
+  }
+</section>

@@ -1,0 +1,26 @@
+<main dir="ltr" class="fixed top-20 right-4 z-50 w-72 md:w-96 rounded-lg animate-fadeIn transition-all">
+  @for (toast of toastService.messages(); track toast.id) {
+  <section class="p-2 bg-white shadow my-4 rounded">
+    <article
+      [ngClass]="{'border-l-success': toast.type === type.SUCCESS ,'border-l-error': toast.type === type.ERROR ,'border-l-yellow-500': toast.type === type.WARNING ,'border-l-blue-500': toast.type === type.INFO}"
+      class="flex flex-row items-center justify-between gap-4 px-4 py-2 border-l-4 animate-fadeIn bg-white">
+      <aside class="flex flex-row items-center gap-4">
+        <img [src]="getIconSrc(toast.type)" class="w-6" alt="icon" />
+        @if (toast.message) {
+        <p
+          class="text-gray-shade-1 font-TheSans-Plain rtl:text-right ltr:text-left text-xs md:text-sm max-w-44 md:max-w-64">
+          {{ toast.message }}</p>
+        }
+        @if (toast.apiMessage) {
+        <p
+          class="text-gray-shade-1 font-TheSans-Plain rtl:text-right ltr:text-left text-xs md:text-sm max-w-44 md:max-w-64">
+          {{ toast.apiMessage.errorMessages }}</p>
+        }
+      </aside>
+      <button (click)="toastService.removeToast(toast.id)">
+        <img src="assets/icons/close.svg" alt="close" class="size-3" />
+      </button>
+    </article>
+  </section>
+  }
+</main>

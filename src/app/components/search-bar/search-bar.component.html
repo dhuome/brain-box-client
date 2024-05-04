@@ -1,0 +1,19 @@
+<main dir="ltr" class="flex items-center gap-x-8 font-TheSans-Plain">
+  <form class="flex items-center rounded border" [formGroup]="searchForm"
+    (ngSubmit)="search(searchForm.getRawValue().searchedValue)">
+    <input type="text" [placeholder]="placeholder" formControlName="searchedValue"
+      class="w-72 md:w-80 rounded border-gray-shade-2 bg-white py-2 text-gray-shade-1 caret-primary outline-none ltr:pl-4 ltr:pr-9 rtl:pl-9 rtl:pr-4" />
+    <button type="button"
+      [ngClass]="{hidden:(searchForm.controls.searchedValue.errors && searchForm.controls.searchedValue.touched) || searchForm.controls.searchedValue.errors}"
+      (click)="resetFunc()"
+      class="pr-4 active:scale-95 opacity-20 transition-all hover:opacity-100">
+      <img src="assets/icons/close.svg" alt="close" class="size-6" />
+    </button>
+    <button [ngClass]="{hidden: searchForm.getRawValue().searchedValue}" type="submit"
+      class="pr-4 active:scale-95 transition-all">
+      <img src="assets/icons/search.svg" alt="close" class="size-6" />
+    </button>
+  </form>
+  <button (click)="search(searchForm.getRawValue().searchedValue)" type="submit"
+    class="btn bg-primary text-white hover:bg-primary/95 min-h-10 h-10 font-TheSans-Plain transition-all hidden md:block">Search</button>
+</main>

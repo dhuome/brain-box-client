@@ -1,0 +1,55 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "TheSans-Plain";
+    src: local("TheSans-Plain"),
+      url(assets/fonts/TheSans-Plain.otf) format("truetype");
+    font-display: fallback;
+  }
+
+  @font-face {
+    font-family: "TheSans-Bold";
+    src: local("TheSans-Bold"),
+      url(assets/fonts/TheSans-Bold.otf) format("truetype");
+    font-display: fallback;
+  }
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  outline: none;
+}
+
+/* scroll bar design */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background: #ededed;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #acacac;
+}

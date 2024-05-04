@@ -1,0 +1,9 @@
+<main class="min-h-screen flex flex-col">
+  <app-header />
+  <app-toast />
+  <section class="flex-1 flex flex-col">
+    <router-outlet class="router-flex" />
+    <ng-content></ng-content>
+  </section>
+  <app-footer />
+</main>

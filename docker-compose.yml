@@ -1,0 +1,8 @@
+version: '3.3'
+
+services:
+  brain-box-client:
+    container_name: brain-box-client
+    image: brain-box-client:latest
+    ports:
+      - '8080:80'

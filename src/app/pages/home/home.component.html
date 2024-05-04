@@ -1,0 +1,32 @@
+<main class="p-4 md:p-12 flex flex-1 items-center justify-center flex-col gap-y-8">
+  <header>
+    <app-search-bar [searchedValue]="filterQuery().query" placeholder="Search for article ..."
+      (searchValue)="onSearch($event)" (triggerClear)="onClear()" />
+  </header>
+  <aside class="divider text-gray-shade-2 md:px-12">-=-=-=-=-</aside>
+
+  @if (articlesQuery.isPending()) {
+  <span class="loading loading-spinner loading-lg flex-1"></span>
+  }@else {
+  <section class="flex flex-col justify-start items-center flex-1 gap-4 w-full" [scrollWindow]="true" infiniteScroll
+    [infiniteScrollDistance]="1" [infiniteScrollThrottle]="150" (scrolled)="articlesQuery.fetchNextPage()">
+
+    @for (article of articlesQuery.data(); track article.id) {
+    <app-article class="max-w-5xl w-full" [articleDetails]="article" (clickedArticle)="navigateToArticle(article.id)" />
+    }@empty {
+    <div class="flex flex-col items-center justify-center flex-1 animate-fadeIn">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+        class="no-articles-icon h-12 w-12 text-gray-500 mb-4">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      <p class="no-articles-text text-gray-500">Oops! Looks like there are no articles available.</p>
+    </div>
+    }
+
+    @if (articlesQuery.isFetchingNextPage() || articlesQuery.isPending()) {
+    <span class="loading loading-spinner loading-lg"></span>
+    }
+  </section>
+  }
+
+</main>

@@ -1,0 +1,42 @@
+<header class="w-full h-16 flex items-center justify-between px-8 border-b border-stone-100 bg-white shadow-1">
+  <a [routerLink]="[routes.TIMELINE]">
+    <img class="size-16" src="assets/images/logo.svg" alt="logo" />
+  </a>
+  <section class="flex items-center gap-x-4">
+    @if (authService.hasAuthority(authorities.USER)) {
+    <button (click)="isPostArticlePopupActive.set(true)"
+      class="flex items-center gap-x-2 active:scale-95 transition-all">
+      <img src="assets/icons/write.svg" alt="write" class="size-5" />
+      <p class="font-TheSans-Plain text-gray-shade-1">Write</p>
+    </button>
+    }
+    @if (!authService.getAuthInfo(); as auth) {
+    <button (click)="isAuthPopupActive.set(true)"
+      class="btn bg-primary text-white hover:bg-primary/95 min-h-6 h-9 font-TheSans-Plain transition-all">Login</button>
+    }@else {
+    <button (click)="isConfirmationPopupActive.set(true)"
+      class="btn bg-primary text-white hover:bg-primary/95 min-h-6 h-9 font-TheSans-Plain transition-all">Logout</button>
+    }
+  </section>
+</header>
+@if (isAuthPopupActive()) {
+@switch (ActiveAuthStep) {
+@case (authStep.LOGIN) {
+<app-login-card (singUpStep)="ActiveAuthStep = authStep.SIGN_UP" (closeModal)="isAuthPopupActive.set(false)"
+  [@fadeInOut] />
+}
+@case (authStep.SIGN_UP) {
+<app-sign-up-card (loginStep)="ActiveAuthStep = authStep.LOGIN"
+  (closeModal)="isAuthPopupActive.set(false); ActiveAuthStep = authStep.LOGIN" [@fadeInOut] />
+}
+}
+}
+
+@if (isConfirmationPopupActive()) {
+<app-confirmation-popup [@fadeInOut] headerTitle="Logout" message="Are you sure you want to logout?" actionTitle="Exit"
+  cancelTitle="Cancel" (triggerCancel)="isConfirmationPopupActive.set(false)" (triggerFunc)="onLogout()" />
+}
+
+@if (isPostArticlePopupActive()) {
+<app-article-card [@fadeInOut] (closeModal)="isPostArticlePopupActive.set(false)" />
+}

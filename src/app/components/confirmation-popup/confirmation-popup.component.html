@@ -1,0 +1,27 @@
+<section class="fixed inset-0 bg-gray-800 opacity-30"></section>
+
+<main class="fixed flex justify-center items-center top-0 bottom-0 left-0 right-0 m-auto z-40">
+  <section
+    class="max-w-72 md:max-w-md w-full bg-white border-stone-50 border-2 rounded-btn shadow rtl:text-right ltr:text-left p-4">
+    <article class="flex items-center justify-between">
+      <p class="text-sm font-TheSans-Bold">{{ headerTitle }}</p>
+      <button [disabled]="isDisabled" (click)="triggerCancel.emit()" class="active:scale-95 transition-all">
+        <img src="assets/icons/close.svg" alt="close" class="size-3" />
+      </button>
+    </article>
+    <aside class="w-full m-auto py-1 border-gray-200 border-b"></aside>
+    <p class="text-main text-sm font-TheSans-Plain pt-4 pb-12">{{ message }}</p>
+    <article class="flex justify-end items-center gap-8">
+      <button [disabled]="isDisabled" type="button" (click)="triggerCancel.emit()"
+        class="btn btn-ghost min-h-6 h-9 font-TheSans-Plain transition-all">{{ cancelTitle }}</button>
+
+      <button [disabled]="isDisabled" type="button" (click)="triggerFunc.emit()"
+        class="btn bg-primary text-white hover:bg-primary/95 min-h-6 h-9 font-TheSans-Plain disabled:text-white transition-all">{{
+        actionTitle }}
+        @if (isDisabled) {
+        <span class="loading loading-spinner"></span>
+        }
+      </button>
+    </article>
+  </section>
+</main>

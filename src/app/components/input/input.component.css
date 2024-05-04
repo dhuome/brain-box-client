@@ -1,0 +1,16 @@
+/* Remove background color in autofill input*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #141D71;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px transparent;
+}
+
+/* Remove eye icon from password input in ms edge*/
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}

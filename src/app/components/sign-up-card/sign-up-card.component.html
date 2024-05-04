@@ -1,0 +1,53 @@
+<section class="fixed inset-0 bg-gray-800 opacity-30"></section>
+
+<main class="fixed flex justify-center items-center top-0 bottom-0 left-0 right-0 m-auto z-40">
+  <section class="flex flex-col items-center bg-white border-stone-50 border rounded-btn shadow text-gray-shade-1">
+    <button (click)="closeModal.emit()" class="self-end p-4 active:scale-95 transition-all">
+      <img src="assets/icons/close.svg" alt="close" class="size-5" />
+    </button>
+    <header class="text-center py-3">
+      <p class="font-TheSans-Bold text-lg">Welcome New fellow</p>
+      <p class="font-TheSans-Plain text-xs">Please enter your details to sign up</p>
+    </header>
+    <article class="w-64 md:w-96"
+      [ngClass]="{'animate-fadeIn': formMessage.message || formMessage.apiMessage?.errorMessages}">
+      <app-form-message [formMessage]="formMessage" />
+    </article>
+    <form class="flex flex-col items-center space-y-10 p-4 md:px-12 md:py-6" #form="ngForm" [formGroup]="singUpForm"
+      (ngSubmit)="onSignUp()">
+      <section class="w-full flex flex-col md:flex-row md:justify-evenly gap-y-10 gap-x-8">
+        <article class="w-full md:w-56">
+          <app-input controlName="username" [formGroupDirective]="form" label="Your Username" [errors]="usernameErrors"
+            [maxLength]="256" [isMandatory]="true" placeholder="Test" />
+        </article>
+        <article class="w-full md:w-56">
+          <app-input controlName="mobileNumber" [formGroupDirective]="form" label="Your Mobile Number"
+            [errors]="mobileNumberErrors" [isMandatory]="true" placeholder="50-000-0000" [isPhoneNumber]="true"
+            [maxLength]="11" mask="00-000-0000" [allowedRegex]="regex.NUMBERS" />
+        </article>
+      </section>
+
+      <section class="w-full flex flex-col md:flex-row md:justify-evenly gap-y-10 gap-x-8">
+        <article class="w-full md:w-56">
+          <app-input controlName="email" [formGroupDirective]="form" label="Your email" [errors]="emailErrors"
+            [maxLength]="256" [isMandatory]="true" placeholder="Test@test.com" />
+        </article>
+        <article class="w-full md:w-56">
+          <app-input controlName="password" [formGroupDirective]="form" type="password" label="Your password"
+            [errors]="passwordErrors" [isMandatory]="true" placeholder="* * * * * * * *" [maxLength]="16" />
+        </article>
+      </section>
+
+      <button [disabled]="createUserMutation.isPending()"
+        class="btn btn-primary bg-primary border-none w-full disabled:text-white">Sign Up
+        @if (createUserMutation.isPending()) {
+        <span class="loading loading-spinner"></span>
+        }
+      </button>
+      <aside class="divider px-4">-</aside>
+      <button type="button" (click)="loginStep.emit()"
+        class="font-TheSans-Plain text-primary hover:text-opacity-70 hover:underline text-xs transition-colors">Do you
+        already have an account?<span class="font-TheSans-Bold"> Login</span></button>
+    </form>
+  </section>
+</main>

@@ -1,0 +1,18 @@
+@if (!!(this.formMessage.message || this.formMessage.apiMessage)) {
+<article class="py-2.5" [ngClass]="{'animate-fadeIn': formMessage.message || formMessage.apiMessage}">
+  <main class="flex items-center justify-center gap-2 font-TheSans-Plain animate-fadeIn text-sm">
+    <img src="assets/icons/error.svg" alt="error" class="w-4" />
+    @if (formMessage.message) {
+    <p class="text-error">{{ formMessage.message }}</p>
+    }
+    @if (formMessage.apiMessage) {
+    <p class="text-error">{{
+      formMessage.apiMessage.errorMessages }}
+    </p>
+    }
+  </main>
+</article>
+}
+@else {
+<aside class="py-5"></aside>
+}

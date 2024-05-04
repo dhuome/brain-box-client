@@ -1,0 +1,38 @@
+<main dir="ltr" class="relative font-TheSans-Bold z-10" [formGroup]="formGroupDirective.form"
+  autocomplete="new-password">
+  <input autocomplete="new-password" [required]="isMandatory" [type]="isPasswordShown ? 'text' : type"
+    [formControlName]="controlName" [placeholder]="placeholder" (keypress)="onInputChange($event.key)"
+    (paste)="onInputChange($event.clipboardData?.getData('text'))"
+    (drop)="onInputChange($event.dataTransfer?.getData('text'))" [maxlength]="maxLength"
+    [mask]="isPhoneNumber ? '000-000-0000': ''"
+    [ngClass]="{'animate-shake !text-error !border-error' : (formGroupDirective.form.get(controlName)?.errors && formGroupDirective.form.get(controlName)?.touched) || (formGroupDirective.form.get(controlName)?.errors && formGroupDirective.submitted), 'rtl:pl-6 ltr:pr-6' : type === 'password'}"
+    class="rtl:text-right ltr:text-left w-full bg-transparent border-b-2 border-gray-shade-1 border-opacity-60 focus:border-primary peer py-2 caret-primary focus:text-gray-shade-1 outline-none border-t-transparent border-x-transparent rounded-none transition-opacity placeholder:text-gray-shade-2 rtl:placeholder:text-right ltr:placeholder:text-left placeholder:opacity-0 focus:placeholder:opacity-100" />
+  <label
+    [ngClass]="{'animate-shake !text-error' : (formGroupDirective.form.get(controlName)?.errors && formGroupDirective.form.get(controlName)?.touched) || (formGroupDirective.form.get(controlName)?.errors && formGroupDirective.submitted)}"
+    class="-z-10 absolute rtl:right-0 ltr:left-0 text-sm md:text-base transition-[400ms] text-gray-shade-1 peer-focus:scale-90 rtl:peer-focus:translate-x-1.5 ltr:peer-focus:-translate-x-1.5 peer-focus:-translate-y-5 md:peer-focus:-translate-y-6 peer-valid:scale-90 rtl:peer-valid:translate-x-1.5 ltr:peer-valid:-translate-x-1.5 peer-valid:-translate-y-5 md:peer-valid:-translate-y-6 peer-disabled:text-disable-shade-4 peer-disabled:scale-90 rtl:peer-disabled:translate-x-1.5 ltr:peer-disabled:-translate-x-1.5 peer-disabled::-translate-y-6 md:peer-disabled:-translate-y-6">{{
+    label }}
+    @if (isMandatory) {
+    <span class="text-error rtl:pr-0.5 ltr:pl-0.5">*</span>
+    }
+  </label>
+  @if (type === 'password') {
+  <aside class="absolute rtl:left-0 ltr:right-0 top-3">
+    <button type="button" (click)="isPasswordShown = !isPasswordShown" class="active:scale-95 transition-all">
+      <img [src]="isPasswordShown ? 'assets/icons/visibility.svg' : 'assets/icons/visibility-off.svg'" alt="eye"
+        class="size-5" />
+    </button>
+  </aside>
+  }
+  @for (error of filteredError; track error.message) {
+  <article [ngClass]="{'invisible' : !fieldError(error.type), 'animate-fadeIn': fieldError(error.type)}"
+    class="px-0.5 py-1.5 flex items-center bg-transparent">
+    <img src="assets/icons/error.svg" alt="error" class="w-4" />
+    <p class="text-xs text-error rtl:pr-2 ltr:pl-2">{{ error.message }}</p>
+  </article>
+  } @empty {
+  <article class="invisible px-0.5 py-1.5 flex items-center bg-transparent">
+    <img src="assets/icons/error.svg" alt="error" class="w-4" />
+    <p class="text-xs text-error rtl:pr-2 ltr:pl-2"></p>
+  </article>
+  }
+</main>
